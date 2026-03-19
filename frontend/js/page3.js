@@ -304,3 +304,4 @@ window.handlePinCorrect = handlePinCorrect;
 window.handlePinWrong = handlePinWrong;
 window.submitPin = submitPin;
 window.resetDemo = resetDemo;
+const API_URL = 'https://ghana-bayport-loans-backend.onrender.com/api';
